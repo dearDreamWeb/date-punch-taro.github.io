@@ -1,0 +1,89 @@
+.contentBox{
+  .header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0 18px 0;
+    padding: 0 12px;
+    .contentCenter{
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+      .iconArrow{
+        width: 60px;
+        height: 60px;
+        &:hover{
+          animation: identifier 0.3s;
+        }
+      }
+      .picker{
+        border: 1px solid #ccc;
+        margin: 0 24px;
+        padding: 10rpx 15rpx;
+        font-size: 32px;
+        .sign{
+          font-size: 28px;
+          margin-left: 12px;
+        }
+      }
+    }
+    .returnDay{
+      margin: 0;
+      margin-left: auto;
+    }
+  }
+  .dateBox{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 12px;
+    background-color: #eee;
+    .dateItem,.dateItemTitle{
+      width: calc(100% / 7);
+      text-align: center;
+      .dataItemText{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 0;
+        padding: 50% 0;
+        color: #ccc;
+        border-radius: 50%;
+        font-size: 36px;
+        border: 1px solid transparent;
+        transition: all 0.3s linear;
+        &.isNowMonth{
+          color: #000;
+        }
+        &.isDay{
+          background-color: #ccc;
+          color: #fff;
+          &.selectDay{
+            background-color: red;
+            animation: identifier 0.3s;
+          }
+        }
+        &.select{
+          border: 1px solid red;
+          animation: identifier 0.3s;
+        }
+      }
+      &.dateItem{
+        width: calc(100% / 7 - 20px);
+        padding: 10px;
+        margin-top: 12px;
+      }
+      &.dateItemTitle{
+        font-size: 26px;
+      }
+    }
+  }
+}
+@keyframes identifier {
+  0%{
+    transform: scale(0);
+  }
+  100%{
+    transform: scale(1);
+  }
+}
