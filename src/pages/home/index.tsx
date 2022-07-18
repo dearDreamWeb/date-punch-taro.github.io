@@ -167,7 +167,9 @@ export default function Home() {
             <View onClick={() => item.isNowMonth && changeDate(item)} className={`dataItemText ${item.isNowMonth ? 'isNowMonth' : ''} ${item.isDay ? 'isDay' : ''} ${item.select ? item.isDay ? 'selectDay' : 'select' : ''}`}>{item.value}</View>
           </View>))}
       </View>
-
+      <View>
+        <View>计划清单：</View>
+      </View>
     </View>
   )
 }

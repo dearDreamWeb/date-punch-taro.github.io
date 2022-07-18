@@ -1,12 +1,12 @@
 export default defineAppConfig({
   pages: [
-    'pages/home/index',
     'pages/index/index',
+    'pages/home/index',
     'pages/statistics/index',
   ],
   window: {
     backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff', 
+    navigationBarBackgroundColor: '#fff',
     navigationBarTitleText: '早睡计划',
     navigationBarTextStyle: 'black'
   },
