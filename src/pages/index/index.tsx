@@ -1,5 +1,5 @@
 import { Component, useEffect, useState } from 'react'
-import { navigateTo, redirectTo, showToast,setStorageSync } from '@tarojs/taro'
+import { switchTab, redirectTo, showToast, setStorageSync, getStorageSync } from '@tarojs/taro'
 import { View, Text, Input, Button, Image } from '@tarojs/components'
 import { register, login } from '../../api/user'
 import './index.less'
@@ -12,7 +12,14 @@ export default function Index() {
   const [rePassword, setRePassword] = useState('')
 
   useEffect(() => {
+    if(getStorageSync('isLogin')){
+      switchTab({
+        url: '/pages/home/index'
+      })
+    }
+  }, [])
 
+  useEffect(() => {
     setAccount('')
     setPassword('')
     setRePassword('')
@@ -57,8 +64,9 @@ export default function Index() {
       return;
     }
     showToast({ title: '登录成功', icon: 'success' })
-    setStorageSync('token',res.data.token)
-    redirectTo({
+    setStorageSync('token', res.data.token)
+    setStorageSync('isLogin', true)
+    switchTab({
       url: '/pages/home/index'
     })
   }
@@ -91,7 +99,7 @@ export default function Index() {
           loginType === 'login' ? (
             <>
               <Input className='diyInput' type='text' placeholder='请输入手机号' value={account} onInput={(e) => setAccount(e.detail.value)} />
-              <Input className='diyInput' type='safe-password' password placeholder='请输入密码' value={password} onInput={(e) => setPassword(e.detail.value)} />
+              <Input className='diyInput'  password placeholder='请输入密码' value={password} onInput={(e) => setPassword(e.detail.value)} />
               <Button className='loginBtn' type='primary' onClick={loginHandler}>登录</Button>
               <View className='registerBox'>
                 <Text className='registerText' onClick={() => setLoginType('register')}>没有账号？立即注册</Text>

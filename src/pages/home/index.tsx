@@ -1,6 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
-import { View, Text, Picker, Image, Button } from '@tarojs/components'
+import { useState, useEffect, useMemo } from 'react'
+import { View, Text, Picker, Image, Button, Icon } from '@tarojs/components'
+import { showToast } from '@tarojs/taro'
 import moment from 'moment';
+import { searchPlan, SearchPlanCallBackItem } from '../../api/plan';
+import { createPunch } from '../../api/punch';
 import './index.less'
 import arrowLeft from '../../assets/images/arrow-left.png';
 import arrowRight from '../../assets/images/arrow-right.png';
@@ -17,12 +20,24 @@ export default function Home() {
   const [dateArr, setDateArr] = useState<DateItem[][]>([[]]);
   const [dateTitle] = useState<string[]>(['日', '一', '二', '三', '四', '五', '六'])
   const [nowDay] = useState<string>(moment().format('YYYY-MM-DD'))
+  const [planList, setPlanList] = useState<SearchPlanCallBackItem[]>([])
 
   useEffect(() => {
-    // setDate(moment())
-
     displayDate()
+    searchPlanHandler()
+    console.log(new Date(nowDay).getTime() === new Date(selectedDate).getTime());
   }, [selectedDate])
+
+  const isTodayPunch = useMemo(()=>{
+    return new Date(nowDay).getTime() === new Date(selectedDate).getTime()
+  },[selectedDate,nowDay])
+
+  const searchPlanHandler = async () => {
+    const res = await searchPlan({ date: selectedDate })
+    if (res.success) {
+      setPlanList(res.data.list)
+    }
+  }
 
   const displayDate = () => {
     const { selectedYear, selectedMonth, selectedDay } = parseDate(selectedDate.replace(/-/g, '/'))
@@ -31,7 +46,7 @@ export default function Home() {
     // 选择的月份第一天
     let date1 = new Date(selectedYear, (selectedMonth - 1));
     let week = date1.getDay();  // 获取这个月的一号是星期几
-    console.log(week);
+
     // 上个月月末的最后一天
     let date2 = new Date(selectedYear, (selectedMonth - 1), 0);
     let lastMonthDays = date2.getDate(); // 获取上个月总共有多少天
@@ -85,7 +100,6 @@ export default function Home() {
       }
       arr.push(rawArr1)
     }
-    console.log(arr)
     setDateArr(arr)
   }
 
@@ -140,8 +154,22 @@ export default function Home() {
   /***
    * 回到今天
    */
-  const returnDay = ()=>{
+  const returnDay = () => {
     setSelectedDate(moment().format('YYYY-MM-DD'))
+  }
+
+  /**
+   * 打卡
+   */
+  const punchPlan = async (data) => {
+    const { plan_id } = data;
+    const res = await createPunch({ planId: plan_id });
+    if (!res.success) {
+      showToast({ title: '打卡失败', icon: 'none' });
+      return;
+    }
+    showToast({ title: '打卡成功', icon: 'none' });
+    searchPlanHandler();
   }
 
   return (
@@ -167,8 +195,22 @@ export default function Home() {
             <View onClick={() => item.isNowMonth && changeDate(item)} className={`dataItemText ${item.isNowMonth ? 'isNowMonth' : ''} ${item.isDay ? 'isDay' : ''} ${item.select ? item.isDay ? 'selectDay' : 'select' : ''}`}>{item.value}</View>
           </View>))}
       </View>
-      <View>
-        <View>计划清单：</View>
+      <View className='planMain'>
+        <View className='planTitle'>计划清单：</View>
+        <View className='listBox'>
+          {planList.map((item) => (
+            <View key={item.plan_id} className={`itemBox ${item.todayPunch ? 'todayPunch' : ''}`}>
+              <View className='planName'>{item.plan_name}</View>
+              {
+                item.todayPunch
+                  ? <Icon size='20' type='success' />
+                  : isTodayPunch
+                    ? <View className='itemBtn' onClick={() => punchPlan(item)}>打卡</View>
+                    : <View className='unPunch'>未打卡</View>
+              }
+            </View>
+          ))}
+        </View>
       </View>
     </View>
   )

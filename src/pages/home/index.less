@@ -78,6 +78,41 @@
       }
     }
   }
+  .planMain{
+    padding: 12px 0;
+    .planTitle{
+      padding: 0 20px;
+      font-size: 40px;
+    }
+    .listBox{
+      .itemBox{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        height: 45px;
+        background-color: #000;
+        color: #fff;
+        .planName{
+          font-size: 36px;
+        }
+        .itemBtn{
+          font-size: 40px;
+          color: #33dc16;
+        }
+        .unPunch{
+          color: #fff;
+        }
+        &.todayPunch{
+          background-color: #e8ffeb;
+          .planName{
+            color: #30bd0e;
+          }
+        }
+      }
+    }
+  }
 }
 @keyframes identifier {
   0%{

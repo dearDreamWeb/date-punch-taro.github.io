@@ -1,4 +1,4 @@
-import { request, getStorageSync, setStorageSync } from '@tarojs/taro'
+import { request, getStorageSync, setStorageSync, removeStorageSync, navigateTo, showToast } from '@tarojs/taro'
 
 interface RequestProps {
   url: string;
@@ -6,10 +6,10 @@ interface RequestProps {
   method?: keyof Taro.request.Method;
 }
 
-const requestApi = ({ url, method = 'POST', data }: RequestProps):Promise<any> => {
-  const baseUrl = 'http://localhost:4396';
+const requestApi = ({ url, method = 'POST', data }: RequestProps): Promise<any> => {
+  const baseUrl = 'http://192.168.31.50:4396';
   const token = getStorageSync('token');
-  let header:any = {}
+  let header: any = {}
   if (token) {
     header.authorization = token
   }
@@ -20,6 +20,15 @@ const requestApi = ({ url, method = 'POST', data }: RequestProps):Promise<any> =
       data,
       header,
       success: function (res) {
+        if (!(res.data.success) && (res.data.code === 401 || res.data.code === 10000)) {
+          removeStorageSync('token');
+          setStorageSync('isLogin', false)
+          showToast({ title: '请重新登录', icon: 'none' })
+          navigateTo({
+            url: '/pages/index/index'
+          })
+          return;
+        }
         resolve(res.data)
       }
     })
