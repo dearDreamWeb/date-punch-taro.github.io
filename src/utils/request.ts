@@ -5,7 +5,7 @@ interface RequestProps {
   data: any;
   method?: keyof Taro.request.Method;
 }
-
+// 192.168.31.50
 const requestApi = ({ url, method = 'POST', data }: RequestProps): Promise<any> => {
   const baseUrl = 'http://192.168.31.50:4396';
   const token = getStorageSync('token');

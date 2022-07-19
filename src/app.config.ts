@@ -1,13 +1,15 @@
 export default defineAppConfig({
   pages: [
-    'pages/index/index',
+    'pages/planManage/planManage',
+    'pages/addPlan/addPlan',
     'pages/home/index',
+    'pages/index/index',
     'pages/statistics/index',
   ],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: '早睡计划',
+    navigationBarTitleText: '计划清单',
     navigationBarTextStyle: 'black'
   },
   tabBar : {
@@ -22,6 +24,12 @@ export default defineAppConfig({
         "iconPath": "assets/images/home.png",
         "selectedIconPath": "assets/images/hone-selected.png",
         "text": "首页"
+      },
+      {
+        "pagePath": "pages/planManage/planManage",
+        "iconPath": "assets/images/plan-manage.png",
+        "selectedIconPath": "assets/images/plan-manage-selected.png",
+        "text": "计划清单"
       },
       {
         "pagePath": "pages/statistics/index",

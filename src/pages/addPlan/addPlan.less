@@ -1,0 +1,39 @@
+.addPlanBox{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 200px;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  .planItem{
+    margin-bottom: 30px;
+    width: 80vw;
+    .itemLabel{
+      margin-bottom: 20px;
+      font-size: 36px;
+    }
+    .planNameInput{
+      padding: 0 10px;
+      height: 80px;
+      border: 1px solid #ccc;
+    }
+    .picker{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #ccc;
+      padding: 10px 15px;
+      width: 100%;
+      font-size: 36px;
+      box-sizing: border-box;
+      .sign{
+        font-size: 28px;
+        margin-left: 12px;
+      }
+    }
+    &:last-child{
+      margin-top: 60px;
+    }
+  }
+}
