@@ -10,6 +10,7 @@ import deleteIcon from '../../assets/images/delete.png'
 
 function PlanManage() {
   const [planList, setPlanList] = useState<SearchAllPlanCallBackItem[]>([])
+  const [bgColorList] = useState(['#000', '#3c8518', '#c7d825', '#14bfbf', '#2581d8', '#d82596'])
 
   useDidShow(() => {
     getPlanList()
@@ -24,13 +25,20 @@ function PlanManage() {
     if (!res.success) {
       return;
     }
-    setPlanList(res.data.list || [])
+    const list = (res.data.list || []).map((item, index) => {
+      return {
+        ...item,
+        bgColor: bgColorList[(index % bgColorList.length)]
+      }
+    })
+    setPlanList(list)
   }
 
   /**
    * 添加计划，跳转到添加计划页面
    */
   const addPlan = () => {
+    console.log(1312);
     navigateTo({
       url: '/pages/addPlan/addPlan'
     })
@@ -57,6 +65,26 @@ function PlanManage() {
     })
   }
 
+  /**
+   * 选中计划
+   * @param index
+   */
+  const selectItem = (index: number) => {
+    if (planList[index].select) {
+      planList.forEach((item, i) => item.select = false);
+    } else {
+      planList.forEach((item, i) => item.select = index === i);
+    }
+
+    setPlanList([...planList])
+  }
+
+  const editPlan = (item: SearchAllPlanCallBackItem) => {
+    navigateTo({
+      url: `/pages/addPlan/addPlan?data=${JSON.stringify(item)}`
+    })
+  }
+
   return (
     <View className='planManageBox'>
       <View className='planManageHeader'>
@@ -64,16 +92,22 @@ function PlanManage() {
         <Image className='headerImage' src={addIcon} onClick={addPlan} />
       </View>
       <View className='listBox'>
-        {planList.map((item) => (
-          <View key={item.plan_id} className='listMain'>
-            <View className='itemTop'>
-              <View>{item.plan_name}</View>
-              <View className='iconBox'>
-                <Image className='itemIcon' src={editIcon} />
-                <Image className='itemIcon' src={deleteIcon} onClick={() => deletePlanHandler(item.plan_id)} />
-              </View>
+        {planList.map((item, index) => (
+          <View
+            key={item.plan_id}
+            className='listMain'
+            style={{ backgroundColor: item.bgColor }}
+            onClick={() => selectItem(index)}
+          >
+            <View>{item.plan_name}</View>
+            <View className={`itemTime ${item.planExpired ? 'planExpired' : ''}`}>
+              <View>{moment(item.plan_start_date).format('YYYY-MM-DD')}</View>
+              <View>{moment(item.plan_end_date).format('YYYY-MM-DD')}</View>
             </View>
-            <View className={`itemTime ${item.planExpired ? 'planExpired' : ''}`}>{moment(item.plan_start_date).format('YYYY-MM-DD')}至{moment(item.plan_end_date).format('YYYY-MM-DD')}</View>
+            <View className='iconBox' style={{ display: item.select ? 'flex' : 'none' }}>
+              <Image className='itemIcon' src={editIcon} onClick={() => editPlan(item)} />
+              <Image className='itemIcon' src={deleteIcon} onClick={() => deletePlanHandler(item.plan_id)} />
+            </View>
           </View>
         ))}
       </View>

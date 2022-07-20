@@ -28,9 +28,9 @@ export default function Home() {
     console.log(new Date(nowDay).getTime() === new Date(selectedDate).getTime());
   }, [selectedDate])
 
-  const isTodayPunch = useMemo(()=>{
+  const isTodayPunch = useMemo(() => {
     return new Date(nowDay).getTime() === new Date(selectedDate).getTime()
-  },[selectedDate,nowDay])
+  }, [selectedDate, nowDay])
 
   const searchPlanHandler = async () => {
     const res = await searchPlan({ date: selectedDate })
@@ -174,44 +174,44 @@ export default function Home() {
 
   return (
     <View className='contentBox'>
-      <View className='header'>
-        <View className='contentCenter'>
-          <Image src={arrowLeft} mode='aspectFit' className='iconArrow' onClick={() => changeMonth('prev')} />
-          <Picker value={selectedDate} mode='date' onChange={onDateChange}>
-            <View className='picker'>
-              {selectedDate}<Text className='sign'>▼</Text>
-            </View>
-          </Picker>
-          <Image src={arrowRight} className='iconArrow' onClick={() => changeMonth('next')} />
-        </View>
-        <Button size='mini' className='returnDay' onClick={returnDay}>回到今天</Button>
+    <View className='header'>
+      <View className='contentCenter'>
+        <Image src={arrowLeft} mode='aspectFit' className='iconArrow' onClick={() => changeMonth('prev')} />
+        <Picker value={selectedDate} mode='date' onChange={onDateChange}>
+          <View className='picker'>
+            {selectedDate}<Text className='sign'>▼</Text>
+          </View>
+        </Picker>
+        <Image src={arrowRight} className='iconArrow' onClick={() => changeMonth('next')} />
       </View>
-      <View className='dateBox'>
-        {dateTitle.map((item, index) => (
-          <View key={index} className='dateItemTitle'>{item}</View>
+      <Button size='mini' className='returnDay' onClick={returnDay}>回到今天</Button>
+    </View>
+    <View className='dateBox'>
+      {dateTitle.map((item, index) => (
+        <View key={index} className='dateItemTitle'>{item}</View>
+      ))}
+      {dateArr.flat().map((item, index) => (
+        <View key={index} className='dateItem'>
+          <View onClick={() => item.isNowMonth && changeDate(item)} className={`dataItemText ${item.isNowMonth ? 'isNowMonth' : ''} ${item.isDay ? 'isDay' : ''} ${item.select ? item.isDay ? 'selectDay' : 'select' : ''}`}>{item.value}</View>
+        </View>))}
+    </View>
+    <View className='planMain'>
+      <View className='planTitle'>计划清单：</View>
+      <View className='listBox'>
+        {planList.map((item) => (
+          <View key={item.plan_id} className={`itemBox ${item.todayPunch ? 'todayPunch' : ''}`}>
+            <View className='planName'>{item.plan_name}</View>
+            {
+              item.todayPunch
+                ? <Icon size='20' type='success' />
+                : isTodayPunch
+                  ? <View className='itemBtn' onClick={() => punchPlan(item)}>打卡</View>
+                  : <View className='unPunch'>未打卡</View>
+            }
+          </View>
         ))}
-        {dateArr.flat().map((item, index) => (
-          <View key={index} className='dateItem'>
-            <View onClick={() => item.isNowMonth && changeDate(item)} className={`dataItemText ${item.isNowMonth ? 'isNowMonth' : ''} ${item.isDay ? 'isDay' : ''} ${item.select ? item.isDay ? 'selectDay' : 'select' : ''}`}>{item.value}</View>
-          </View>))}
-      </View>
-      <View className='planMain'>
-        <View className='planTitle'>计划清单：</View>
-        <View className='listBox'>
-          {planList.map((item) => (
-            <View key={item.plan_id} className={`itemBox ${item.todayPunch ? 'todayPunch' : ''}`}>
-              <View className='planName'>{item.plan_name}</View>
-              {
-                item.todayPunch
-                  ? <Icon size='20' type='success' />
-                  : isTodayPunch
-                    ? <View className='itemBtn' onClick={() => punchPlan(item)}>打卡</View>
-                    : <View className='unPunch'>未打卡</View>
-              }
-            </View>
-          ))}
-        </View>
       </View>
     </View>
+  </View>
   )
 }

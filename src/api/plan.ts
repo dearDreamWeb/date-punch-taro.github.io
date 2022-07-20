@@ -1,7 +1,7 @@
 import request from '../utils/request'
 import { BaseCallBack } from './index'
 
-export interface SearchAllPlanCallBackItem{
+export interface SearchAllPlanCallBackItem {
   plan_id: string;
   user_id: string;
   plan_name: string;
@@ -10,8 +10,10 @@ export interface SearchAllPlanCallBackItem{
   phone_number: string;
   todayPunch: boolean;
   planExpired: boolean;
+  select?: boolean;
+  bgColor: string;
 }
-export interface SearchPlanCallBackItem{
+export interface SearchPlanCallBackItem {
   plan_id: string;
   user_id: string;
   plan_name: string;
@@ -81,6 +83,21 @@ export const deletePlan = (data): Promise<BaseCallBack> => {
   return new Promise(async (resolve) => {
     const res = await request({
       url: '/plans/deletePlan',
+      data,
+    })
+    resolve(res)
+  })
+}
+
+/**
+ * 修改计划
+ * @param data
+ * @returns
+ */
+export const updatePlan = (data): Promise<BaseCallBack> => {
+  return new Promise(async (resolve) => {
+    const res = await request({
+      url: '/plans/updatePlan',
       data,
     })
     resolve(res)

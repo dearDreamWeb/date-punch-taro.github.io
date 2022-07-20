@@ -1,15 +1,36 @@
 import { useEffect, useState } from 'react'
 import { View, Input, Picker, Text, Button } from '@tarojs/components'
-import { showToast, switchTab } from '@tarojs/taro'
-import { createPlan } from '../../api/plan';
+import { showToast, switchTab, getCurrentInstance } from '@tarojs/taro'
+import { createPlan, updatePlan } from '../../api/plan';
 import moment from 'moment';
 import './addPlan.less'
 
 export default function AddPlan() {
+  const instance: any = getCurrentInstance()
+
   const [planStartDate, setPlanStartDate] = useState<string>(moment().format('YYYY-MM-DD'))
   const [planEndDate, setPlanEndDate] = useState<string>(moment().format('YYYY-MM-DD'))
   const [planName, setPlanName] = useState<string>('')
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
+  const [planId, setPlanId] = useState<string>('');
 
+  useEffect(() => {
+    let { data } = instance.router!.params
+    setIsUpdate(!!data);
+    if (data) {
+      data = JSON.parse(data);
+      const { plan_id, plan_start_date, plan_end_date, plan_name } = data;
+      setPlanName(plan_name)
+      setPlanStartDate(moment(plan_start_date).format('YYYY-MM-DD'))
+      setPlanEndDate(moment(plan_end_date).format('YYYY-MM-DD'))
+      setPlanId(plan_id)
+    }
+  }, [instance])
+
+  /**
+   * 添加计划
+   * @returns
+   */
   const addPlan = async () => {
     if (!planName) {
       showToast({ title: '请输入计划名', icon: 'none' })
@@ -25,6 +46,28 @@ export default function AddPlan() {
       return;
     }
     showToast({ title: '添加计划成功', icon: 'success' })
+    await new Promise((resolve) => setTimeout(resolve, 1500))
+    switchTab({
+      url: '/pages/planManage/planManage'
+    })
+  }
+
+  /**
+ * 修改计划
+ * @returns
+ */
+  const updatePlanHandler = async () => {
+    const res = await updatePlan({
+      planId,
+      planName,
+      planStartDate,
+      planEndDate
+    })
+    if (!res.success) {
+      showToast({ title: '修改计划失败', icon: 'error' })
+      return;
+    }
+    showToast({ title: '修改计划成功', icon: 'success' })
     await new Promise((resolve) => setTimeout(resolve, 1500))
     switchTab({
       url: '/pages/planManage/planManage'
@@ -54,7 +97,7 @@ export default function AddPlan() {
         </Picker>
       </View>
       <View className='planItem'>
-        <Button type='primary' onClick={addPlan}>确认添加</Button>
+        <Button type='primary' onClick={() => isUpdate ? updatePlanHandler() : addPlan()}>{isUpdate ? '确认修改' : '确认添加'}</Button>
       </View>
     </View>
   )

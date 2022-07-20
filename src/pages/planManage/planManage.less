@@ -1,4 +1,8 @@
 .planManageBox{
+  width: 100vw;
+  min-height: 100vh;
+  padding: 20px 0;
+  background: url('https://cdn2.mihuiai.com/plan-4.jpg');
   .planManageHeader{
     padding: 0 10px;
     display: flex;
@@ -13,26 +17,41 @@
     }
   }
   .listBox{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0 16px;
     .listMain{
+      position: relative;
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       margin-top: 24px;
       padding: 16px;
+      width: 45%;
+      height: 300px;
       font-size: 36px;
       background-color: #000;
       color: #fff;
-      .itemTop{
-        display: flex;
-        justify-content: space-between;
-        .iconBox{
-          .itemIcon{
-            margin-left: 24px;
-            width: 60px;
-            height: 60px;
-          }
+      border-radius: 12px;
+      .iconBox{
+        display: none;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        padding: 20px;
+        justify-content: center;
+        background-color: rgba(255,255,255,0.5);
+        box-sizing: border-box;
+        .itemIcon{
+          margin: 0 24px;
+          width: 60px;
+          height: 60px;
         }
       }
       .itemTime{
+        margin-top: 24px;
         font-size: 26px;
         &.planExpired{
           color: #f40;
@@ -41,3 +60,4 @@
     }
   }
 }
+
