@@ -8,7 +8,7 @@ interface RequestProps {
 // 192.168.31.50   localhost  家
 // 192.168.7.7   localhost
 const requestApi = ({ url, method = 'POST', data }: RequestProps): Promise<any> => {
-  const baseUrl = 'http://192.168.31.50:4396';
+  const baseUrl = 'http://192.168.7.7:4396';
   const token = getStorageSync('token');
   let header: any = {}
   if (token) {

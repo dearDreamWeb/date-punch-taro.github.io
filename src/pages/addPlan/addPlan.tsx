@@ -78,7 +78,13 @@ export default function AddPlan() {
     <View className='addPlanBox'>
       <View className='planItem'>
         <View className='itemLabel'>计划名：</View>
-        <Input className='planNameInput' placeholder='请输入计划名' value={planName} onInput={(e) => setPlanName(e.detail.value)} />
+        <Input
+          className='planNameInput'
+          placeholder='请输入计划名'
+          value={planName}
+          onInput={(e) => setPlanName(e.detail.value)}
+          placeholderTextColor='#fff'
+        />
       </View>
       <View className='planItem'>
         <View className='itemLabel'>计划开始时间：</View>

@@ -100,9 +100,15 @@ function PlanManage() {
             onClick={() => selectItem(index)}
           >
             <View>{item.plan_name}</View>
-            <View className={`itemTime ${item.planExpired ? 'planExpired' : ''}`}>
-              <View>{moment(item.plan_start_date).format('YYYY-MM-DD')}</View>
-              <View>{moment(item.plan_end_date).format('YYYY-MM-DD')}</View>
+            <View className='listMainBottom'>
+              <View className={`itemTime ${item.planExpired ? 'planExpired' : ''}`}>
+                <View>{moment(item.plan_start_date).format('YYYY-MM-DD')}</View>
+                <View>{moment(item.plan_end_date).format('YYYY-MM-DD')}</View>
+              </View>
+              <View className='itemTime'>
+                <View>打卡：{item.punchDays}天</View>
+                <View>计划：{item.planDays}天</View>
+              </View>
             </View>
             <View className='iconBox' style={{ display: item.select ? 'flex' : 'none' }}>
               <Image className='itemIcon' src={editIcon} onClick={() => editPlan(item)} />

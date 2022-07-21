@@ -15,6 +15,17 @@ export const login = (data): Promise<LoginCallBack> => {
     resolve(res)
   })
 }
+
+export const isLogin = (data): Promise<LoginCallBack> => {
+  return new Promise(async (resolve) => {
+    const res = await request({
+      url: '/users/isLogin',
+      data,
+    })
+    resolve(res)
+  })
+}
+
 export const register = (data): Promise<BaseCallBack> => {
   return new Promise(async (resolve) => {
     const res = await request({

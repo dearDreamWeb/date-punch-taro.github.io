@@ -1,5 +1,6 @@
 export default defineAppConfig({
   pages: [
+    'pages/my/my',
     'pages/planManage/planManage',
     'pages/addPlan/addPlan',
     'pages/home/index',
@@ -36,6 +37,12 @@ export default defineAppConfig({
         "iconPath": "assets/images/statistics.png",
         "selectedIconPath": "assets/images/statistics-selected.png",
         "text": "统计"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "iconPath": "assets/images/my.png",
+        "selectedIconPath": "assets/images/my-selected.png",
+        "text": "我的"
       },
     ],
   },

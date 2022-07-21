@@ -12,6 +12,8 @@ export interface SearchAllPlanCallBackItem {
   planExpired: boolean;
   select?: boolean;
   bgColor: string;
+  punchDays: number; // 打卡天数
+  planDays: number; // 计划天数
 }
 export interface SearchPlanCallBackItem {
   plan_id: string;
