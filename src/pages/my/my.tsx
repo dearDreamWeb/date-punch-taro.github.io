@@ -20,7 +20,9 @@ export default function My() {
 
   return (
     <View className='myBox'>
-      <Button className='logout' type='primary' onClick={logout}>退出登录</Button>
+      <View className='logoutBox'>
+        <Button className='logout' type='primary' onClick={logout}>退出登录</Button>
+      </View>
     </View>
   )
 }

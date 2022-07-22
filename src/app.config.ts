@@ -1,11 +1,11 @@
 export default defineAppConfig({
   pages: [
+    'pages/home/index',
+    'pages/statistics/index',
     'pages/my/my',
     'pages/planManage/planManage',
     'pages/addPlan/addPlan',
-    'pages/home/index',
     'pages/index/index',
-    'pages/statistics/index',
   ],
   window: {
     backgroundTextStyle: 'light',
