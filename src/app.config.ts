@@ -1,7 +1,7 @@
 export default defineAppConfig({
   pages: [
     'pages/home/index',
-    'pages/statistics/index',
+    // 'pages/statistics/index',
     'pages/my/my',
     'pages/planManage/planManage',
     'pages/addPlan/addPlan',
@@ -32,12 +32,12 @@ export default defineAppConfig({
         "selectedIconPath": "assets/images/plan-manage-selected.png",
         "text": "计划清单"
       },
-      {
-        "pagePath": "pages/statistics/index",
-        "iconPath": "assets/images/statistics.png",
-        "selectedIconPath": "assets/images/statistics-selected.png",
-        "text": "统计"
-      },
+      // {
+      //   "pagePath": "pages/statistics/index",
+      //   "iconPath": "assets/images/statistics.png",
+      //   "selectedIconPath": "assets/images/statistics-selected.png",
+      //   "text": "统计"
+      // },
       {
         "pagePath": "pages/my/my",
         "iconPath": "assets/images/my.png",

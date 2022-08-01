@@ -14,6 +14,17 @@ interface BubbleProps {
   xLeft?: boolean;
 }
 
+interface DrawGradientProps {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  color1: string;
+  color2: string;
+  r?: number;
+  type?: 'linear' | 'circle'
+}
+
 export default function home() {
   const { windowWidth, windowHeight } = getSystemInfoSync()
   const canvasRef = useRef(null)
@@ -102,16 +113,27 @@ export default function home() {
    * @param param0
    * @returns
    */
-  const drawGradient = ({ x1, y1, x2, y2, color1, color2 }) => {
+  const drawGradient = ({ x1, y1, r, x2, y2, color1, color2, type = 'linear' }: DrawGradientProps) => {
     if (!ctx) {
       return;
     }
     ctx.save()
-    const linearGradient = ctx.createLinearGradient(x1, y1, x2, y2);
-    linearGradient.addColorStop(0, color1);
-    linearGradient.addColorStop(1, color2);
-    ctx.setFillStyle(linearGradient)
-    ctx.fillRect(y1, y1, x2 * 2, y2)
+
+    if (type === 'linear') {
+      let linearGradient = ctx.createLinearGradient(x1, y1, x2, y2);
+      linearGradient.addColorStop(0, color1);
+      linearGradient.addColorStop(1, color2);
+      ctx.setFillStyle(linearGradient)
+      ctx.fillRect(y1, y1, x2 * 2, y2)
+    } else {
+      let circularGradient = ctx.createCircularGradient(x1, y1, r!);
+      circularGradient.addColorStop(0, color1);
+      circularGradient.addColorStop(1, color2);
+      ctx.setFillStyle(circularGradient)
+      ctx.fillRect(0, 0, windowWidth, windowHeight)
+    }
+
+
     ctx.restore()
   }
 
@@ -175,7 +197,20 @@ export default function home() {
         }
       }
       const { x, y, r, scale } = item
-      fish({ x, y, r, scale })
+      let rgb = {
+        r: 0,
+        g: 0,
+        b: 0
+      }
+      // if (Math.random() > 0.95) {
+      //   rgb = {
+      //     r: rand(0, 255),
+      //     g: rand(0, 255),
+      //     b: rand(0, 255)
+      //   }
+      //   drawGradient({ x1: x, y1: y, x2: x + r * 1.5, y2: y + r * 1.5, r: r * 1.8, color1: `rgba(${rgb.r},${rgb.g},${rgb.b},0.5)`, color2: 'rgba(21, 8, 105,0.5)', type: 'circle' })
+      // }
+      fish({ x, y, r, scale, rgb })
     })
   }
 
@@ -184,7 +219,7 @@ export default function home() {
    * @param param0
    * @returns
    */
-  const fish = ({ x, y, r, scale }: { x: number; y: number; r: number; scale: number; }) => {
+  const fish = ({ x, y, r, scale, rgb }: { x: number; y: number; r: number; scale: number; rgb: { r: number; g: number; b: number; } }) => {
     if (!ctx) {
       return;
     }
@@ -192,7 +227,7 @@ export default function home() {
     const eyeballRadius = r / 10;
     const eyeballRadiusBlack = eyeballRadius / 3;
     ctx.save()
-    drawCircle({ x, y, r: r * scale, fillColor: 'rgba(0,0,0,0.5)' })
+    drawCircle({ x, y, r: r * scale, fillColor: `rgba(${rgb.r},${rgb.g},${rgb.b},0.5)` })
     // 左眼球
     drawCircle({ x: x - eyeballRadius, y: y - r, r: eyeballRadius, fillColor: '#fff' })
     // 右眼球
@@ -201,6 +236,10 @@ export default function home() {
     drawCircle({ x: x - eyeballRadius, y: y - r, r: eyeballRadiusBlack, fillColor: '#000' })
     // 右眼珠
     drawCircle({ x: x + eyeballRadius, y: y - r, r: eyeballRadiusBlack, fillColor: '#000' })
+    // 嘴巴
+    const mouthW = r / 3;
+    ctx.fillStyle = '#000'
+    ctx.fillRect(x - mouthW / 2, y - r / 5 * 3, mouthW, 2)
     ctx.restore()
   }
 
