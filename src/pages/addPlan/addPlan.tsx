@@ -18,7 +18,7 @@ export default function AddPlan() {
     let { data } = instance.router!.params
     setIsUpdate(!!data);
     if (data) {
-      data = JSON.parse(data);
+      data = JSON.parse(window.decodeURIComponent(data));
       const { plan_id, plan_start_date, plan_end_date, plan_name } = data;
       setPlanName(plan_name)
       setPlanStartDate(moment(plan_start_date).format('YYYY-MM-DD'))
