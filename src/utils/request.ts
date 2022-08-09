@@ -10,7 +10,7 @@ interface RequestProps {
 // 120.25.254.240:32000   服务器
 // hangpiao.blogwxb.cn:32000
 const requestApi = ({ url, method = 'POST', data }: RequestProps): Promise<any> => {
-  const baseUrl = 'http://192.168.7.7:4396';
+  const baseUrl = 'http://120.25.254.240:32000';
   const token = getStorageSync('token');
   let header: any = {}
   if (token) {
