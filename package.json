@@ -27,7 +27,8 @@
     "dev:qq": "npm run build:qq -- --watch",
     "dev:jd": "npm run build:jd -- --watch",
     "dev:quickapp": "npm run build:quickapp -- --watch",
-    "deploy:h5": "./deploy.sh"
+    "deploy:h5": "./deploy.sh",
+    "deploy:gitee:h5": "./deployGitee.sh"
   },
   "browserslist": [
     "last 3 versions",
