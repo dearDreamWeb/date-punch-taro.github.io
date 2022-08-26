@@ -12,6 +12,7 @@
     .logoImage{
       width: 400px;
       height: 400px;
+      animation: identifier 5.5s ease-in-out infinite;
     }
     .diyInput{
       box-sizing: border-box;
@@ -36,5 +37,13 @@
         margin-top: 20px;
       }
     }
+  }
+}
+@keyframes identifier {
+  0%{
+    transform: rotate(0);
+  }
+  100%{
+    transform: rotate(360deg);
   }
 }

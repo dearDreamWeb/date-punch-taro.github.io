@@ -26,14 +26,15 @@ interface DrawGradientProps {
 }
 
 export default function home() {
-  const { windowWidth, windowHeight } = getSystemInfoSync()
+  let { windowWidth, windowHeight } = getSystemInfoSync()
+  windowHeight -= 50;
   const canvasRef = useRef(null)
-  const [ctx, setCtx] = useState<CanvasContext>()
+  const [ctx, setCtx] = useState<any>()
   let rotate = useRef(0).current
   let bubbleArr = useRef<BubbleProps[]>([])
   let freshTime = useRef<number>(0)
   let fishArr = useRef<any[]>([
-    { x: windowWidth / 2, y: windowHeight / 2, originX: windowWidth / 2, originY: windowHeight / 2, r: 100, enlarge: true, scale: 1, isUp: true }
+    { x: 30, y: 30, originX: windowWidth / 2, originY: windowHeight / 2, r: 20, enlarge: true, scale: 1, isUp: true }
   ])
 
   const getBubbleData = (xLeft?: boolean): BubbleProps => {
@@ -47,8 +48,14 @@ export default function home() {
   }
 
   useEffect(() => {
+
     if (!ctx) {
-      setCtx(createCanvasContext('canvas'))
+      fishArr.current = [
+        { x: windowWidth / 2, y: windowWidth / 2, originX: windowWidth / 2, originY: windowHeight / 2, r: 100, enlarge: true, scale: 1, isUp: true }
+      ];
+      (canvasRef.current as any).width = windowWidth;
+      (canvasRef.current as any).height = windowHeight;
+      setCtx((canvasRef.current as any).getContext('2d'))
       return;
     }
     for (let i = 0; i < MAXNUM; i++) {
@@ -63,7 +70,10 @@ export default function home() {
     if (!ctx) {
       return;
     }
+
     ctx.clearRect(0, 0, windowWidth, windowHeight)
+    ctx.fillStyle = '#000'
+
     drawGradient({
       x1: windowWidth / 2,
       y1: 0,
@@ -104,7 +114,7 @@ export default function home() {
     }
 
     fishesAnimation();
-    ctx.draw()
+    // ctx.draw()
     requestAnimationFrame(canvasInit)
   }
 
@@ -123,13 +133,13 @@ export default function home() {
       let linearGradient = ctx.createLinearGradient(x1, y1, x2, y2);
       linearGradient.addColorStop(0, color1);
       linearGradient.addColorStop(1, color2);
-      ctx.setFillStyle(linearGradient)
+      ctx.fillStyle = linearGradient;
       ctx.fillRect(y1, y1, x2 * 2, y2)
     } else {
       let circularGradient = ctx.createCircularGradient(x1, y1, r!);
       circularGradient.addColorStop(0, color1);
       circularGradient.addColorStop(1, color2);
-      ctx.setFillStyle(circularGradient)
+      ctx.fillStyle = circularGradient;
       ctx.fillRect(0, 0, windowWidth, windowHeight)
     }
 
@@ -223,7 +233,6 @@ export default function home() {
     if (!ctx) {
       return;
     }
-
     const eyeballRadius = r / 10;
     const eyeballRadiusBlack = eyeballRadius / 3;
     ctx.save()
@@ -245,7 +254,7 @@ export default function home() {
 
   return (
     <View>
-      <Canvas ref={canvasRef} style={{ width: `${windowWidth}px`, height: `${windowHeight}px` }} canvasId='canvas'></Canvas>
+      <canvas ref={canvasRef} ></canvas>
     </View>
   )
 }
