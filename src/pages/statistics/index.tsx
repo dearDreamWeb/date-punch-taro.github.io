@@ -3,6 +3,7 @@ import { View, Canvas } from '@tarojs/components'
 import { createCanvasContext, CanvasContext, getSystemInfoSync } from '@tarojs/taro'
 import { rand } from '../../utils/utils'
 import './index.less'
+import { searchAllPlan } from '../../api/plan';
 
 const MAXNUM = 50
 
@@ -30,6 +31,7 @@ export default function home() {
   windowHeight -= 50;
   const canvasRef = useRef(null)
   const [ctx, setCtx] = useState<any>()
+  const [rate, setRate] = useState<number | null>(null)
   let rotate = useRef(0).current
   let bubbleArr = useRef<BubbleProps[]>([])
   let freshTime = useRef<number>(0)
@@ -48,7 +50,31 @@ export default function home() {
   }
 
   useEffect(() => {
+    getInfo();
+  }, [])
+  const getInfo = async () => {
+    const res = await searchAllPlan({});
+    if (!res.success) {
+      return;
+    }
+    let allDays = 0;
+    let punchDays = 0;
 
+    res.data.list.forEach((item) => {
+      allDays += item.planDays;
+      punchDays += item.punchDays;
+    })
+    if ((punchDays / allDays) % 1 === 0) {
+      setRate(Number(`${punchDays / allDays}.00`))
+    } else {
+      setRate(Number((punchDays / allDays).toFixed(2)))
+    }
+  }
+
+  useEffect(() => {
+    if (typeof rate !== 'number') {
+      return;
+    }
     if (!ctx) {
       fishArr.current = [
         { x: windowWidth / 2, y: windowWidth / 2, originX: windowWidth / 2, originY: windowHeight / 2, r: 100, enlarge: true, scale: 1, isUp: true }
@@ -64,7 +90,7 @@ export default function home() {
       })
     }
     canvasInit()
-  }, [ctx])
+  }, [ctx, rate])
 
   const canvasInit = () => {
     if (!ctx) {
@@ -114,7 +140,7 @@ export default function home() {
     }
 
     fishesAnimation();
-    // ctx.draw()
+
     requestAnimationFrame(canvasInit)
   }
 
@@ -136,7 +162,7 @@ export default function home() {
       ctx.fillStyle = linearGradient;
       ctx.fillRect(y1, y1, x2 * 2, y2)
     } else {
-      let circularGradient = ctx.createCircularGradient(x1, y1, r!);
+      let circularGradient = ctx.createRadialGradient(x1, y1, r!, x1, y1, r! * 2);
       circularGradient.addColorStop(0, color1);
       circularGradient.addColorStop(1, color2);
       ctx.fillStyle = circularGradient;
@@ -212,14 +238,14 @@ export default function home() {
         g: 0,
         b: 0
       }
-      // if (Math.random() > 0.95) {
-      //   rgb = {
-      //     r: rand(0, 255),
-      //     g: rand(0, 255),
-      //     b: rand(0, 255)
-      //   }
-      //   drawGradient({ x1: x, y1: y, x2: x + r * 1.5, y2: y + r * 1.5, r: r * 1.8, color1: `rgba(${rgb.r},${rgb.g},${rgb.b},0.5)`, color2: 'rgba(21, 8, 105,0.5)', type: 'circle' })
-      // }
+      if (Math.random() > 0.95) {
+        rgb = {
+          r: rand(0, 255),
+          g: rand(0, 255),
+          b: rand(0, 255)
+        }
+        drawGradient({ x1: x, y1: y, x2: x + r * 1.5, y2: y + r * 1.5, r: r * 1.8, color1: `rgba(${rgb.r},${rgb.g},${rgb.b},0.5)`, color2: 'rgba(21, 8, 105,0.5)', type: 'circle' })
+      }
       fish({ x, y, r, scale, rgb })
     })
   }
@@ -236,7 +262,15 @@ export default function home() {
     const eyeballRadius = r / 10;
     const eyeballRadiusBlack = eyeballRadius / 3;
     ctx.save()
+    ctx.save()
+    // 身体
     drawCircle({ x, y, r: r * scale, fillColor: `rgba(${rgb.r},${rgb.g},${rgb.b},0.5)` })
+    // 完成率文案
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = "20px -apple-system-font,Helvetica Neue,sans-serif";
+    ctx.textAlign = 'center';
+    ctx.fillText(`完成率：${rate}%`, x, y);
+    ctx.restore()
     // 左眼球
     drawCircle({ x: x - eyeballRadius, y: y - r, r: eyeballRadius, fillColor: '#fff' })
     // 右眼球

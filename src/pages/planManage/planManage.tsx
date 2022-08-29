@@ -38,7 +38,6 @@ function PlanManage() {
    * 添加计划，跳转到添加计划页面
    */
   const addPlan = () => {
-    console.log(1312);
     navigateTo({
       url: '/pages/addPlan/addPlan'
     })
