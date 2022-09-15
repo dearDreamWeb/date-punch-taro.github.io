@@ -25,15 +25,19 @@ export default function Home() {
   useEffect(() => {
     displayDate()
     searchPlanHandler()
-    console.log(new Date(nowDay).getTime() === new Date(selectedDate).getTime());
   }, [selectedDate])
 
   const isTodayPunch = useMemo(() => {
     return new Date(nowDay).getTime() === new Date(selectedDate).getTime()
   }, [selectedDate, nowDay])
 
+  // 是否为昨天
+  const isYesterdayPunch = useMemo(() => {
+    return new Date(nowDay).getTime() - new Date(selectedDate).getTime() <= 1000 * 60 * 60 * 24 && new Date(nowDay).getTime() - new Date(selectedDate).getTime() > 0
+  }, [selectedDate, nowDay])
+
   const searchPlanHandler = async () => {
-    const res = await searchPlan({ date: selectedDate })
+    const res = await searchPlan({ date: selectedDate.replace(/-/g, '/') })
     if (res.success) {
       setPlanList(res.data.list)
     }
@@ -163,7 +167,7 @@ export default function Home() {
    */
   const punchPlan = async (data) => {
     const { plan_id } = data;
-    const res = await createPunch({ planId: plan_id });
+    const res = await createPunch({ planId: plan_id, date: selectedDate.replace(/-/g,'/') });
     if (!res.success) {
       showToast({ title: '打卡失败', icon: 'none' });
       return;
@@ -174,44 +178,46 @@ export default function Home() {
 
   return (
     <View className='contentBox'>
-    <View className='header'>
-      <View className='contentCenter'>
-        <Image src={arrowLeft} mode='aspectFit' className='iconArrow' onClick={() => changeMonth('prev')} />
-        <Picker value={selectedDate} mode='date' onChange={onDateChange}>
-          <View className='picker'>
-            {selectedDate}<Text className='sign'>▼</Text>
-          </View>
-        </Picker>
-        <Image src={arrowRight} className='iconArrow' onClick={() => changeMonth('next')} />
+      <View className='header'>
+        <View className='contentCenter'>
+          <Image src={arrowLeft} mode='aspectFit' className='iconArrow' onClick={() => changeMonth('prev')} />
+          <Picker value={selectedDate} mode='date' onChange={onDateChange}>
+            <View className='picker'>
+              {selectedDate}<Text className='sign'>▼</Text>
+            </View>
+          </Picker>
+          <Image src={arrowRight} className='iconArrow' onClick={() => changeMonth('next')} />
+        </View>
+        <Button size='mini' className='returnDay' onClick={returnDay}>回到今天</Button>
       </View>
-      <Button size='mini' className='returnDay' onClick={returnDay}>回到今天</Button>
-    </View>
-    <View className='dateBox'>
-      {dateTitle.map((item, index) => (
-        <View key={index} className='dateItemTitle'>{item}</View>
-      ))}
-      {dateArr.flat().map((item, index) => (
-        <View key={index} className='dateItem'>
-          <View onClick={() => item.isNowMonth && changeDate(item)} className={`dataItemText ${item.isNowMonth ? 'isNowMonth' : ''} ${item.isDay ? 'isDay' : ''} ${item.select ? item.isDay ? 'selectDay' : 'select' : ''}`}>{item.value}</View>
-        </View>))}
-    </View>
-    <View className='planMain'>
-      <View className='planTitle'>计划清单：</View>
-      <View className='listBox'>
-        {planList.map((item) => (
-          <View key={item.plan_id} className={`itemBox ${item.todayPunch ? 'todayPunch' : ''}`}>
-            <View className='planName'>{item.plan_name}</View>
-            {
-              item.todayPunch
-                ? <Icon size='20' type='success' />
-                : isTodayPunch
-                  ? <View className='itemBtn' onClick={() => punchPlan(item)}>打卡</View>
-                  : <View className='unPunch'>未打卡</View>
-            }
-          </View>
+      <View className='dateBox'>
+        {dateTitle.map((item, index) => (
+          <View key={index} className='dateItemTitle'>{item}</View>
         ))}
+        {dateArr.flat().map((item, index) => (
+          <View key={index} className='dateItem'>
+            <View onClick={() => item.isNowMonth && changeDate(item)} className={`dataItemText ${item.isNowMonth ? 'isNowMonth' : ''} ${item.isDay ? 'isDay' : ''} ${item.select ? item.isDay ? 'selectDay' : 'select' : ''}`}>{item.value}</View>
+          </View>))}
+      </View>
+      <View className='planMain'>
+        <View className='planTitle'>计划清单：</View>
+        <View className='listBox'>
+          {planList.map((item) => (
+            <View key={item.plan_id} className={`itemBox ${item.todayPunch ? 'todayPunch' : ''}`}>
+              <View className='planName'>{item.plan_name}</View>
+              {
+                item.todayPunch
+                  ? <Icon size='20' type='success' />
+                  : isTodayPunch
+                    ? <View className='itemBtn' onClick={() => punchPlan(item)}>打卡</View>
+                    : isYesterdayPunch
+                      ? <View className='itemYesterdayBtn' onClick={() => punchPlan(item)}>补卡</View>
+                      : <View className='unPunch'>未打卡</View>
+              }
+            </View>
+          ))}
+        </View>
       </View>
     </View>
-  </View>
   )
 }
