@@ -8,9 +8,9 @@ interface RequestProps {
 // 192.168.31.50:4396   localhost  家
 // 192.168.7.7:4396   公司
 // 120.25.254.240:32000   服务器
-// hangpiao.blogwxb.cn:32000
+// hangpiao.resource.blogwxb.cn:32000
 const requestApi = ({ url, method = 'POST', data }: RequestProps): Promise<any> => {
-  const baseUrl = 'http://120.25.254.240:32000';
+  const baseUrl = 'http://20.25.254.240:32000';
   const token = getStorageSync('token');
   let header: any = {}
   if (token) {

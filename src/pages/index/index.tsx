@@ -3,7 +3,6 @@ import { switchTab, redirectTo, showToast, setStorageSync, getStorageSync } from
 import { View, Text, Input, Button, Image } from '@tarojs/components'
 import { register, login } from '../../api/user'
 import './index.less'
-import logo from '../../assets/images/logo.png'
 
 export default function Index() {
   const [loginType, setLoginType] = useState<'login' | 'register'>('login')
@@ -94,7 +93,7 @@ export default function Index() {
   return (
     <View className='loginBox'>
       <View className='loginMain'>
-        <Image className='logoImage' src={logo} />
+        <Image className='logoImage' src='https://resource.blogwxb.cn/planPunch/logo.png' />
         {
           loginType === 'login' ? (
             <>
