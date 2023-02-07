@@ -97,17 +97,17 @@ export default function Index() {
         {
           loginType === 'login' ? (
             <>
-              <Input className='diyInput' type='text' placeholder='请输入手机号' value={account} onInput={(e) => setAccount(e.detail.value)} />
-              <Input className='diyInput'  password placeholder='请输入密码' value={password} onInput={(e) => setPassword(e.detail.value)} />
+              <Input className='diyInput' type='text' placeholder='请输入手机号' value={account} onInput={(e:any) => setAccount(e.target.value)} />
+              <Input className='diyInput'  password placeholder='请输入密码' value={password} onInput={(e:any) => setPassword(e.target.value)} />
               <Button className='loginBtn' type='primary' onClick={loginHandler}>登录</Button>
               <View className='registerBox'>
                 <Text className='registerText' onClick={() => setLoginType('register')}>没有账号？立即注册</Text>
               </View>
             </>) : (
             <>
-              <Input className='diyInput' type='text' placeholder='请输入手机号' value={account} onInput={(e) => setAccount(e.detail.value)} />
-              <Input className='diyInput' type='safe-password' password placeholder='请输入密码' value={password} onInput={(e) => setPassword(e.detail.value)} />
-              <Input className='diyInput' type='safe-password' password placeholder='请输入确认密码' value={rePassword} onInput={(e) => setRePassword(e.detail.value)} />
+              <Input className='diyInput' type='text' placeholder='请输入手机号' value={account} onInput={(e:any) => setAccount(e.target.value)} />
+              <Input className='diyInput' type='safe-password' password placeholder='请输入密码' value={password} onInput={(e:any) => setPassword(e.target.value)} />
+              <Input className='diyInput' type='safe-password' password placeholder='请输入确认密码' value={rePassword} onInput={(e:any) => setRePassword(e.target.value)} />
               <Button className='registerBtn' type='primary' onClick={registerHandler}>注册</Button>
               <View className='registerBox'>
                 <Text className='registerText' onClick={() => setLoginType('login')}>已有账号？去登录</Text>

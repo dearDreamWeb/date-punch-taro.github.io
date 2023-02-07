@@ -82,7 +82,7 @@ export default function AddPlan() {
           className='planNameInput'
           placeholder='请输入计划名'
           value={planName}
-          onInput={(e) => setPlanName(e.detail.value)}
+          onInput={(e:any) => setPlanName(e.target.value)}
           placeholderTextColor='#fff'
         />
       </View>

@@ -269,7 +269,7 @@ export default function home() {
     ctx.fillStyle = 'rgba(255,255,255,0.7)';
     ctx.font = "20px -apple-system-font,Helvetica Neue,sans-serif";
     ctx.textAlign = 'center';
-    ctx.fillText(`完成率：${rate}%`, x, y);
+    ctx.fillText(`完成率：${rate || 0}%`, x, y);
     ctx.restore()
     // 左眼球
     drawCircle({ x: x - eyeballRadius, y: y - r, r: eyeballRadius, fillColor: '#fff' })
