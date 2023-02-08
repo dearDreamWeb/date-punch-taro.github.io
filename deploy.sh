@@ -20,7 +20,7 @@ git commit -m 'deploy'
 git remote add origin https://github.com/dearDreamWeb/date-punch-taro.github.io.git
 
 # 如果你要部署在 https://<USERNAME>.github.io
-git push -f origin   master:deploy
+git push -f origin   main:deploy
 
 # 如果你要部署在 https://<USERNAME>.github.io/<REPO>
 # git push -f git@github.com:<USERNAME>/<REPO>.git main:gh-pages
